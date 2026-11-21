@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>استوديو قوالب الأخبار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&family=Changa:wght@700;800&family=Lalezar&display=swap">
+<style>
+/* VOICE everyday tool for a content team: loud like the videos it makes, calm in the controls
+   IDEA a tabloid newsroom desk: the phone proof sits pinned beside the copy sheet
+   PICTURE the live 1080x1920 frame in a phone, safe-area guides drawn on top
+   COLOUR warm newsprint ground, ink, hot red #ff3b1f, press yellow #ffd400
+   TYPE Lalezar for the posters' headlines + Cairo for the interface
+   LAYOUT laptop: sticky phone on one side, stacked control panels on the other; phone: proof pinned on top, panels under */
+:root{color-scheme:light dark;--bg:light-dark(#fff4ea,#17110d);--ink:light-dark(#1b1410,#fbefe4);--mut:light-dark(#6f6158,#b7a79b);--card:light-dark(#ffffff,#231a15);--line:light-dark(#ecdccf,#3a2d25);--hot:#ff3b1f;--yel:#ffd400;--blu:#2b3cff}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "Cairo",system-ui,sans-serif;overflow-x:clip}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:18px max(4vw,16px);background:var(--hot);color:#fff}
+.top h1{margin:0;font:400 clamp(30px,4vw,44px)/1.05 "Lalezar","Cairo",sans-serif}
+.top p{margin:0;font-weight:600;opacity:.92}
+.app{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:28px;padding:24px max(4vw,16px) 48px;max-width:1240px;margin:0 auto;align-items:start}
+.stage{position:sticky;top:16px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.phone{height:min(calc(100vh - 200px),760px);min-height:420px;aspect-ratio:9/16;border-radius:44px;padding:10px;background:#0c0908;box-shadow:0 18px 40px rgba(60,25,10,.25)}
+.phone canvas{display:block;width:100%;height:100%;border-radius:34px;background:#222}
+.bar{display:flex;align-items:center;gap:10px;width:min(100%,460px);flex-wrap:wrap;justify-content:center}
+.bar input[type=range]{flex:1 1 160px}
+.time{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap;min-width:5.5em;text-align:center}
+.panel{display:flex;flex-direction:column;gap:16px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px}
+.box h2{margin:0 0 12px;font:800 20px/1.2 "Cairo",sans-serif}
+.hint{margin:6px 0 0;color:var(--mut);font-size:13.5px;line-height:1.6}
+label.f{display:block;font-weight:700;font-size:14px;margin:12px 0 6px}
+input[type=text],textarea,select,input[type=number]{width:100%;font:600 16px "Cairo",sans-serif;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}
+textarea{min-height:96px;resize:vertical;line-height:1.5}
+input:focus-visible,textarea:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid var(--blu);outline-offset:2px}
+input[type=range]{accent-color:var(--hot);width:100%;height:32px}
+button{font:800 15px "Cairo",sans-serif;min-height:44px;padding:8px 16px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+button:hover{background:color-mix(in srgb,var(--ink) 8%,transparent)}
+button.go{background:var(--ink);color:var(--bg)}
+button.go:hover{background:var(--hot);border-color:var(--hot);color:#fff}
+button[disabled]{opacity:.45;cursor:wait}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{min-height:40px;padding:6px 14px;font-weight:700;border-color:var(--line)}
+.chips button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tpls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.tpls button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px;border-radius:18px;border:2px solid var(--line);height:auto}
+.tpls button[aria-pressed=true]{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 9%,transparent)}
+.tpls canvas{width:100%;aspect-ratio:9/16;border-radius:12px;background:#ddd;display:block}
+.zone{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
+.zone label{font-size:13px;font-weight:700;color:var(--mut)}
+.zone input{padding:8px;text-align:center}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sw{display:flex;gap:8px;flex-wrap:wrap}
+.sw button{width:84px;height:44px;padding:0;border-radius:14px;border:2px solid var(--line);overflow:hidden;display:grid;grid-template-columns:repeat(5,1fr)}
+.sw button[aria-pressed=true]{border-color:var(--ink);box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)}
+.sw i{display:block}
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.cols label{font-size:13px;font-weight:700;display:flex;flex-direction:column;gap:4px}
+input[type=color]{width:100%;height:44px;border:1.5px solid var(--line);border-radius:12px;background:none;padding:3px}
+.file{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.file input{font:600 14px "Cairo",sans-serif;max-width:100%}
+.sw2{display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;cursor:pointer}
+.sw2 input{width:22px;height:22px;accent-color:var(--hot)}
+.prompt{border:1.5px dashed var(--line);border-radius:14px;padding:10px 12px;margin-top:10px}
+.prompt b{display:block;font-size:14px}
+.prompt p{margin:4px 0 8px;direction:ltr;text-align:left;font:500 13.5px/1.5 system-ui,sans-serif;color:var(--mut);overflow-wrap:anywhere}
+.prompt button{min-height:36px;padding:4px 14px;font-size:13.5px}
+.prog{height:8px;border-radius:999px;background:var(--line);overflow:hidden;width:min(100%,460px)}
+.prog i{display:block;height:100%;width:0;background:var(--hot)}
+.msg{min-height:1.5em;margin:0;font-weight:700;font-size:14px;text-align:center;max-width:460px}
+.out{display:none;width:min(100%,460px);background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px;text-align:center}
+.out video{width:140px;border-radius:12px;display:block;margin:0 auto 8px}
+.tag{display:inline-block;font-size:12.5px;font-weight:800;background:var(--yel);color:#1b1410;border-radius:999px;padding:2px 10px}
+@media(max-width:900px){.app{grid-template-columns:minmax(0,1fr)}.stage{position:static}.phone{height:min(70vh,560px);min-height:0;border-radius:30px;padding:6px}.phone canvas{border-radius:24px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>استوديو قوالب الأخبار</h1>
+  <p>قوالب أخبار المشاهير بمقاس 9:16، والنص والصور ثابتين جوه المنطقة الآمنة</p>
+</header>
+
+<main class="app">
+  <section class="stage" aria-label="المعاينة">
+    <div class="phone"><canvas id="cv" width="1080" height="1920" aria-label="معاينة الفيديو"></canvas></div>
+    <div class="bar">
+      <button id="play" class="go" type="button">إيقاف</button>
+      <input id="scrub" type="range" min="0" max="7" step="0.01" value="0" aria-label="الوقت">
+      <span class="time" id="time">0.0 ث</span>
+    </div>
+    <div class="bar">
+      <label class="sw2"><input id="guides" type="checkbox" checked> إظهار المنطقة الآمنة</label>
+      <button id="exp" class="go" type="button">تصدير فيديو</button>
+      <button id="png" type="button">صورة PNG</button>
+    </div>
+    <div class="prog" aria-hidden="true"><i id="pg"></i></div>
+    <p class="msg" id="msg" role="status"></p>
+    <div class="out" id="out"><video id="ov" controls playsinline muted></video><span id="otx"></span></div>
+  </section>
+
+  <section class="panel">
+    <div class="box">
+      <h2>الألوان والخط</h2>
+      <div class="sw" id="pals"></div>
+      <div class="cols" style="margin-top:12px;grid-template-columns:repeat(5,minmax(0,1fr))">
+        <label>الخلفية<input id="c_main" type="color" data-k="main"></label>
+        <label>تاني<input id="c_sec" type="color" data-k="sec"></label>
+        <label>مميز<input id="c_acc" type="color" data-k="acc"></label>
+        <label>الكارت<input id="c_card" type="color" data-k="card"></label>
+        <label>الحبر<input id="c_ink" type="color" data-k="ink"></label>
+      </div>
+      <p class="hint">الخلفية واللون التاني بيعملوا التدرج والأشكال، المميز للاسم والإطار، الكارت لخلفية العنوان، والحبر للنص والظلال.</p>
+      <label class="f">خط العناوين</label>
+      <div class="chips" id="fonts"></div>
+    </div>
+
+    <div class="box">
+      <h2>القالب</h2>
+      <div class="tpls" id="tpls">
+        <button type="button" data-t="breaking" aria-pressed="true"><canvas width="216" height="384"></canvas>كلاسيك</button>
+        <button type="button" data-t="spot" aria-pressed="false"><canvas width="216" height="384"></canvas>سبوت لايت</button>
+        <button type="button" data-t="split" aria-pressed="false"><canvas width="216" height="384"></canvas>نص ونص</button>
+      </div>
+    </div>
+
+    <div class="box">
+      <h2>المنصة والمنطقة الآمنة</h2>
+      <div class="chips" id="plats"></div>
+      <div class="zone">
+        <div><label for="z_t">أعلى</label><input id="z_t" type="number" min="0" max="700" step="10"></div>
+        <div><label for="z_b">أسفل</label><input id="z_b" type="number" min="0" max="900" step="10"></div>
+        <div><label for="z_r">يمين</label><input id="z_r" type="number" min="0" max="400" step="10"></div>
+        <div><label for="z_l">شمال</label><input id="z_l" type="number" min="0" max="400" step="10"></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <label class="sw2"><input id="sym" type="checkbox" checked> نفس المسافة يمين وشمال</label>
+        <button id="zr" type="button">رجّع القيم</button>
+      </div>
+      <p class="hint">المسافات بالبكسل على فريم 1080×1920. "كل المنصات" بياخد أكبر مسافة من الأربع منصات. القيم تقريبية، فلو منصة غيّرت مكان الأزرار عدّل الرقم هنا. كل النصوص والصور بتتقص وتصغر عشان متخرجش بره الإطار.</p>
+    </div>
+
+    <div class="box">
+      <h2>الخبر</h2>
+      <div class="row" style="gap:16px">
+        <label class="sw2"><input type="checkbox" data-b="showTag"> شارة الخبر</label>
+        <label class="sw2"><input type="checkbox" data-b="showHandle"> اسم الحساب</label>
+        <label class="sw2"><input type="checkbox" data-b="showTicker"> الشريط المتحرك</label>
+      </div>
+      <label class="f" for="i_tag">نص الشارة</label><input id="i_tag" type="text" data-k="tag">
+      <label class="f" for="i_name">اسم النجم</label><input id="i_name" type="text" data-k="name">
+      <label class="f" for="i_head">العنوان</label><textarea id="i_head" data-k="head"></textarea>
+      <label class="f" for="i_sub">سطر إضافي (بيظهر في الشريط المتحرك)</label><input id="i_sub" type="text" data-k="sub">
+      <div class="cols" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+        <label>اسم الصفحة<input id="i_handle" type="text" data-k="handle"></label>
+        <label>التاريخ<input id="i_date" type="text" data-k="date"></label>
+      </div>
+      <p class="hint"><span class="tag">مثال</span> الاسم والخبر للتجربة بس، اكتب خبرك مكانهم.</p>
+    </div>
+
+    <div class="box">
+      <h2>صورة النجم</h2>
+      <div class="file"><input id="f_photo" type="file" accept="image/*"><button id="x_photo" type="button">شيل الصورة</button></div>
+      <label class="f" for="i_fx">مكان الصورة أفقي</label><input id="i_fx" type="range" min="0" max="1" step="0.01" data-k="fx" data-n>
+      <label class="f" for="i_fy">مكان الصورة رأسي</label><input id="i_fy" type="range" min="0" max="1" step="0.01" data-k="fy" data-n>
+      <label class="f" for="i_zoom">تكبير</label><input id="i_zoom" type="range" min="1" max="2.5" step="0.01" data-k="zoom" data-n>
+      <p class="hint">الصورة بتتحط في المكان المخصص ليها جوه المنطقة الآمنة، وفيها زووم بطيء طول الفيديو.</p>
+    </div>
+
+    <div class="box">
+      <h2>عناصر من Higgsfield</h2>
+      <label class="f" for="f_bg">خلفية (فيديو أو صورة، بتملا الشاشة كلها)</label>
+      <div class="file"><input id="f_bg" type="file" accept="video/*,image/*"><button id="x_bg" type="button">شيل الخلفية</button></div>
+      <label class="f" for="i_tint">طبقة اللون فوق الخلفية</label><input id="i_tint" type="range" min="0" max="0.85" step="0.01" data-k="tint" data-n>
+      <label class="f" for="f_stk">عنصر / ستيكر (PNG شفاف)</label>
+      <div class="file"><input id="f_stk" type="file" accept="image/*"><button id="x_stk" type="button">شيل العنصر</button></div>
+      <label class="f" for="i_ss">حجم العنصر</label><input id="i_ss" type="range" min="100" max="520" step="2" data-k="ss" data-n>
+      <div class="cols" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+        <label>أفقي<input id="i_sx" type="range" min="0" max="1" step="0.01" data-k="sx" data-n></label>
+        <label>رأسي<input id="i_sy" type="range" min="0" max="1" step="0.01" data-k="sy" data-n></label>
+      </div>
+      <label class="f" for="f_logo">اللوجو</label>
+      <div class="file"><input id="f_logo" type="file" accept="image/*"><button id="x_logo" type="button">شيل اللوجو</button></div>
+      <p class="hint">الخلفية بس هي اللي بتوصل لطرف الشاشة. العنصر واللوجو بيفضلوا جوه المنطقة الآمنة مهما حركتهم.</p>
+      <div id="prompts"></div>
+    </div>
+
+    <div class="box">
+      <h2>المدة</h2>
+      <label class="f" for="i_dur">طول الفيديو: <output id="o_dur"></output> ثانية</label>
+      <input id="i_dur" type="range" min="5" max="12" step="0.5" data-k="dur" data-n>
+    </div>
+  </section>
+</main>
+
+<script>
+{
+const W=1080,H=1920;
+const PLAT={
+  all:{n:'كل المنصات',t:220,b:440,l:60,r:160},
+  tiktok:{n:'TikTok',t:160,b:440,l:60,r:140},
+  reels:{n:'Reels',t:220,b:420,l:60,r:120},
+  shorts:{n:'Shorts',t:200,b:400,l:60,r:160},
+  snap:{n:'Snapchat',t:150,b:340,l:60,r:100}
+};
+const PALS=[
+  {n:'بنفسجي',main:'#6a1fb5',sec:'#ff3d8b',acc:'#ffd400',card:'#f3f1f6',ink:'#16101f'},
+  {n:'نار',main:'#ff3b1f',sec:'#ff9a1f',acc:'#1f3bff',card:'#fff6dc',ink:'#14110f'},
+  {n:'كوبالت',main:'#2b3cff',sec:'#00c8ff',acc:'#ff4fa3',card:'#ffffff',ink:'#0d0f2b'},
+  {n:'ليموني',main:'#c8f31d',sec:'#00a896',acc:'#ff3b1f',card:'#ffffff',ink:'#111111'},
+  {n:'فوشيا',main:'#ff2d87',sec:'#7a2cff',acc:'#ffd400',card:'#fff0f6',ink:'#1a0b14'},
+  {n:'غروب',main:'#ff6b35',sec:'#004e89',acc:'#ffd23f',card:'#fffaf0',ink:'#1a1a2e'}
+];
+const FONTS={Lalezar:{n:'لاله زار',w:'400',f:'"Lalezar"',lh:1.3},Cairo:{n:'القاهرة',w:'900',f:'"Cairo"',lh:1.35},Changa:{n:'تشانجا',w:'800',f:'"Changa"',lh:1.3}};
+const PROMPTS={
+  breaking:'Vertical 9:16 seamless looping motion background, bold red and yellow diagonal light streaks sweeping across, glossy broadcast news energy, subtle grain, no text, no people, no logos',
+  spot:'Vertical 9:16 seamless looping background, vivid pop-art stage with colourful spotlight beams and floating confetti, halftone dot texture, celebratory, no text, no people',
+  split:'Vertical 9:16 seamless looping background, abstract magazine collage of torn paper shapes in bright magenta, yellow and cobalt, slow parallax drift, no text, no people',
+  sticker:'Glossy 3D sticker badge, star-burst shape with thick white outline, bright yellow and hot red, playful tabloid style, centered, plain white background, no text'
+};
+const TN={breaking:'عاجل',spot:'سبوت لايت',split:'نص ونص'};
+const DEF={tpl:'breaking',plat:'all',sym:true,zone:{...PLAT.all},tag:'حصري',name:'سلمى رشدي',head:'سلمى رشدي تفاجئ جمهورها بحفل في القاهرة وتعلن موعد ألبومها الجديد',sub:'الألبوم فيه 12 أغنية',handle:'@topnews',date:'21 نوفمبر 2026',fx:.5,fy:.35,zoom:1,main:PALS[0].main,sec:PALS[0].sec,acc:PALS[0].acc,card:PALS[0].card,ink:PALS[0].ink,showTag:false,showHandle:false,showTicker:false,font:'Lalezar',tint:.35,ss:240,sx:.9,sy:.06,dur:7,guides:true};
+const st=JSON.parse(JSON.stringify(DEF));
+const media={img:null,bg:null,bgv:false,stk:null,logo:null};
+try{const s=JSON.parse(localStorage.getItem('news-studio2')||'null');if(s)Object.assign(st,s)}catch(e){}
+const store=()=>{try{localStorage.setItem('news-studio2',JSON.stringify(st))}catch(e){}};
+
+const $=id=>document.getElementById(id);
+const cv=$('cv'),ctx=cv.getContext('2d');
+const cl=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const seg=(t,a,d)=>cl((t-a)/d);
+const eo=x=>1-(1-x)**3;
+const eb=x=>{const c=1.70158;return 1+(c+1)*((x-1)**3)+c*((x-1)**2)};
+const isAr=s=>/[؀-ۿ]/.test(s||'');
+const hex2=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255);
+const lum=h=>{const[r,g,b]=hex2(h);return .2126*r+.7152*g+.0722*b};
+const on=h=>lum(h)>.55?st.ink:'#ffffff';
+const fnt=s=>{const f=FONTS[st.font]||FONTS.Lalezar;return `${f.w} ${s}px ${f.f}, "Cairo", sans-serif`};
+const ui=s=>`800 ${s}px "Cairo", sans-serif`;
+
+function safe(){const z=st.zone;let l=z.l,r=z.r;if(st.sym){l=r=Math.max(l,r)}return{x:l,y:z.t,w:W-l-r,h:H-z.t-z.b}}
+function rr(c,x,y,w,h,r){c.beginPath();c.roundRect(x,y,w,h,r)}
+function wrap(c,text,mw){const ws=text.split(/\s+/).filter(Boolean),L=[];let cur='';for(const w of ws){const t=cur?cur+' '+w:w;if(!cur||c.measureText(t).width<=mw)cur=t;else{L.push(cur);cur=w}}if(cur)L.push(cur);return L}
+function fit(c,text,w,h,max,min,f=fnt){const lh=(FONTS[st.font]||FONTS.Lalezar).lh;for(let s=max;s>=min;s-=2){c.font=f(s);const L=wrap(c,text,w);if(L.length*s*lh<=h&&L.every(l=>c.measureText(l).width<=w))return{s,L,lh}}c.font=f(min);let L=wrap(c,text,w);const m=Math.max(1,Math.floor(h/(min*lh)));if(L.length>m){L=L.slice(0,m);L[m-1]+='…'}return{s:min,L,lh}}
+function txt(c,text,b,o){
+  if(!text)return 0;const f=o.f||fnt;const r=o.r||fit(c,text,b.w,b.h,o.max,o.min,f);const ar=isAr(text);
+  c.save();c.beginPath();c.rect(b.x,b.y,b.w,b.h);c.clip();c.font=f(r.s);c.direction=ar?'rtl':'ltr';c.textBaseline='middle';
+  let x;if(o.align==='center'){c.textAlign='center';x=b.x+b.w/2}else if(o.align==='end'){c.textAlign=ar?'left':'right';x=ar?b.x:b.x+b.w}else{c.textAlign=ar?'right':'left';x=ar?b.x+b.w:b.x}
+  const lh=r.s*r.lh,tot=r.L.length*lh;let y0=b.y;if(o.v==='middle')y0=b.y+(b.h-tot)/2;else if(o.v==='bottom')y0=b.y+b.h-tot;
+  r.L.forEach((l,i)=>{const p=o.t==null?1:eo(seg(o.t,(o.t0||0)+i*.09,.45));c.globalAlpha=p;const y=y0+lh*(i+.5)+(1-p)*r.s*.5;
+    if(o.sh){c.fillStyle=o.sh;c.fillText(l,x+o.so,y+o.so)}c.fillStyle=o.color;c.fillText(l,x,y)});
+  c.restore();return tot}
+function cover(c,el,b,fx,fy,z){const iw=el.videoWidth||el.naturalWidth||el.width,ih=el.videoHeight||el.naturalHeight||el.height;if(!iw||!ih)return;const s=Math.max(b.w/iw,b.h/ih)*z,dw=iw*s,dh=ih*s;c.drawImage(el,b.x+(b.w-dw)*fx,b.y+(b.h-dh)*fy,dw,dh)}
+function contain(c,el,b){const iw=el.naturalWidth||el.width,ih=el.naturalHeight||el.height;if(!iw)return;const s=Math.min(b.w/iw,b.h/ih),dw=iw*s,dh=ih*s;c.drawImage(el,b.x+(b.w-dw)/2,b.y+(b.h-dh)/2,dw,dh)}
+function photo(c,b,t,rad,path){
+  c.save();if(path)path();else rr(c,b.x,b.y,b.w,b.h,rad);c.clip();
+  if(media.img)cover(c,media.img,b,st.fx,st.fy,st.zoom*(1+.07*t/st.dur));
+  else{const g=c.createLinearGradient(0,b.y,0,b.y+b.h);g.addColorStop(0,st.ink);g.addColorStop(1,'#3a3330');c.fillStyle=g;c.fillRect(b.x,b.y,b.w,b.h);
+    const cx=b.x+b.w/2,u=Math.min(b.w,b.h);c.fillStyle='rgba(255,255,255,.16)';c.beginPath();c.arc(cx,b.y+b.h*.42,u*.19,0,7);c.fill();
+    c.beginPath();c.ellipse(cx,b.y+b.h*.98,u*.42,u*.33,0,Math.PI,0);c.fill();
+    c.fillStyle='rgba(255,255,255,.6)';c.font=ui(Math.round(u*.06));c.textAlign='center';c.textBaseline='middle';c.direction='rtl';c.fillText('ارفع صورة النجم',cx,b.y+b.h*.12)}
+  c.restore()}
+function star(c,x,y,r1,r2,n,rot){c.beginPath();for(let i=0;i<n*2;i++){const r=i%2?r2:r1,a=rot+i*Math.PI/n;c.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r)}c.closePath()}
+
+function bgMedia(c){if(!media.bg)return false;c.fillStyle=st.ink;c.fillRect(0,0,W,H);cover(c,media.bg,{x:0,y:0,w:W,h:H},.5,.5,1);if(st.tint>0){c.globalAlpha=st.tint;c.fillStyle=st.main;c.fillRect(0,0,W,H);c.globalAlpha=1}return true}
+function bgStripes(c,t){const g=c.createLinearGradient(0,0,W*.4,H);g.addColorStop(0,st.main);g.addColorStop(1,st.sec);c.fillStyle=g;c.fillRect(0,0,W,H);
+  c.save();c.translate(W/2,H/2);c.rotate(-.5);c.fillStyle=st.acc;c.globalAlpha=.16;const p=150,o=(t*70)%p;for(let x=-1800;x<1800;x+=p)c.fillRect(x+o,-1600,p*.36,3200);c.restore();
+  c.fillStyle=st.acc;c.globalAlpha=.9;c.beginPath();c.arc(W*.12,H*.16,120+10*Math.sin(t*2),0,7);c.fill();c.fillStyle=st.sec;c.globalAlpha=.85;c.beginPath();c.arc(W*.95,H*.86,190,0,7);c.fill();c.globalAlpha=1}
+function bgDots(c,t){const g=c.createRadialGradient(W*.5,H*.35,80,W*.5,H*.4,1300);g.addColorStop(0,st.main);g.addColorStop(1,st.sec);c.fillStyle=g;c.fillRect(0,0,W,H);
+  const cx=W*(.5+.25*Math.sin(t*.6)),cy=H*(.35+.1*Math.cos(t*.5));c.fillStyle=st.acc;c.globalAlpha=.5;
+  for(let y=24;y<H;y+=52)for(let x=(y/52%2?50:24);x<W;x+=52){const d=Math.hypot(x-cx,y-cy);const r=cl(18-d/70,0,18);if(r>1){c.beginPath();c.arc(x,y,r,0,7);c.fill()}}c.globalAlpha=1}
+function bgSplit(c,t,sy){c.fillStyle=st.main;c.fillRect(0,0,W,H);c.fillStyle=st.sec;c.beginPath();c.moveTo(0,sy+70);c.lineTo(W,sy-70);c.lineTo(W,H);c.lineTo(0,H);c.fill();
+  c.fillStyle=st.ink;c.globalAlpha=.18;c.beginPath();c.moveTo(0,H*.8);c.lineTo(W,H*.7);c.lineTo(W,H);c.lineTo(0,H);c.fill();c.globalAlpha=1;
+  const p=eo(seg(t,.1,.7));c.fillStyle=st.acc;c.beginPath();c.moveTo(0,sy+70);c.lineTo(W*p,sy+70-140*p);c.lineTo(W*p,sy+70-140*p+28);c.lineTo(0,sy+98);c.fill()}
+function header(c,t,S,ar){
+  let y=S.y;const p=eb(seg(t,.05,.5));let tw=0;
+  if(st.showTag&&st.tag){c.font=fnt(52);tw=Math.min(S.w*.6,c.measureText(st.tag).width+100);const tx=ar?S.x+S.w-tw:S.x;
+    c.save();c.globalAlpha=cl(p);rr(c,tx,S.y,tw,88,44);c.fillStyle=st.acc;c.fill();txt(c,st.tag,{x:tx+24,y:S.y,w:tw-48,h:88},{max:52,min:28,color:on(st.acc),align:'center',v:'middle'});c.restore()}
+  if(st.showHandle&&st.handle){c.globalAlpha=eo(seg(t,.3,.4));txt(c,st.handle,{x:ar?S.x:S.x+tw+20,y:S.y,w:S.w-tw-20,h:88},{max:40,min:24,f:ui,color:on(st.main),align:tw?'end':'center',v:'middle'});c.globalAlpha=1}
+  if((st.showTag&&st.tag)||(st.showHandle&&st.handle))y+=88+26;return y}
+function logo(c,t,S,ar,y){if(!media.logo)return;c.globalAlpha=eo(seg(t,.4,.4));contain(c,media.logo,{x:ar?S.x+20:S.x+S.w-180,y:y+20,w:160,h:90});c.globalAlpha=1}
+function ticker(c,t,S,ar){const tick=80,ky=S.y+S.h-tick;c.fillStyle=st.ink;c.fillRect(S.x,ky,S.w,tick);
+  const str=[st.showHandle?st.handle:'',st.sub,st.date].filter(Boolean).join('   •   ')+'   •   ';c.save();c.beginPath();c.rect(S.x,ky,S.w,tick);c.clip();c.font=ui(38);c.fillStyle=st.acc;c.textBaseline='middle';c.direction=ar?'rtl':'ltr';c.textAlign='left';
+  const sw=Math.max(200,c.measureText(str).width),o=(t*150)%sw;for(let x=S.x+(ar?o-sw:-o);x<S.x+S.w;x+=sw)c.fillText(str,x,ky+tick/2);c.restore();return tick+20}
+function label(c,t,text,cx,cy,maxW,h,bg,rot,t0){if(!text)return;const p=eb(seg(t,t0,.5));c.font=fnt(Math.round(h*.6));const w=Math.min(maxW,c.measureText(text).width+h*1.1);
+  c.save();c.globalAlpha=cl(p);c.translate(cx,cy);c.rotate(rot);c.scale(p,p);c.fillStyle=st.ink;rr(c,-w/2+10,-h/2+10,w,h,18);c.fill();rr(c,-w/2,-h/2,w,h,18);c.fillStyle=bg;c.fill();
+  txt(c,text,{x:-w/2+h*.4,y:-h/2,w:w-h*.8,h},{max:Math.round(h*.6),min:30,color:on(bg),align:'center',v:'middle'});c.restore()}
+function card(c,t,text,b,rot,t0,align){if(!text||b.h<70)return;const pad=34;const r=fit(c,text,b.w-pad*2,b.h-pad*2,92,40);const hh=Math.min(b.h,r.L.length*r.s*r.lh+pad*2);const p=eo(seg(t,t0,.5));
+  c.save();c.globalAlpha=p;c.translate(b.x+b.w/2,b.y+hh/2);c.rotate(rot*p);c.translate(-(b.x+b.w/2),-(b.y+hh/2));c.fillStyle=st.sec;rr(c,b.x+12,b.y+12,b.w-12,hh,24);c.fill();rr(c,b.x,b.y,b.w-12,hh,24);c.fillStyle=st.card;c.fill();
+  txt(c,text,{x:b.x+pad,y:b.y+pad,w:b.w-12-pad*2,h:hh-pad*2},{r,color:on(st.card)===st.ink?st.ink:'#ffffff',align:align||'center',v:'middle',t,t0:t0+.15});c.restore()}
+
+function tBreaking(c,t,S){
+  if(!bgMedia(c))bgStripes(c,t);
+  c.save();c.beginPath();c.rect(S.x,S.y,S.w,S.h);c.clip();const ar=isAr(st.head+st.name);
+  const top=header(c,t,S,ar);const bot=S.y+S.h-(st.showTicker?ticker(c,t,S,ar):0);const avail=bot-top;
+  const nh=Math.round(cl(avail*.085,80,118));const pad=34;
+  const r=fit(c,st.head,S.w-12-pad*2,Math.max(60,avail*.26-pad*2),92,40);const hh=st.head?r.L.length*r.s*r.lh+pad*2:0;
+  const ph=Math.max(avail*.5,avail-hh-nh/2-22);const pp=eo(seg(t,.15,.7));
+  c.save();c.globalAlpha=pp;const sc=.92+.08*pp;c.translate(S.x+S.w/2,top+ph/2);c.scale(sc,sc);c.translate(-(S.x+S.w/2),-(top+ph/2));
+  rr(c,S.x+16,top+16,S.w-16,ph-16,40);c.fillStyle=st.acc;c.fill();rr(c,S.x,top,S.w-16,ph-16,40);c.fillStyle='#fff';c.fill();photo(c,{x:S.x+8,y:top+8,w:S.w-32,h:ph-32},t,34);c.restore();
+  logo(c,t,S,ar,top);
+  label(c,t,st.name,S.x+S.w/2,top+ph-16,S.w-40,nh,st.acc,-.03,.7);
+  card(c,t,st.head,{x:S.x,y:top+ph-16+nh/2+22,w:S.w,h:bot-(top+ph-16+nh/2+22)},.012,1);
+  c.restore()}
+
+function tSpot(c,t,S){
+  if(!bgMedia(c))bgDots(c,t);
+  c.save();c.beginPath();c.rect(S.x,S.y,S.w,S.h);c.clip();const ar=isAr(st.head);
+  const top=(st.showHandle&&st.handle)?(()=>{c.globalAlpha=eo(seg(t,0,.4));c.font=ui(40);const tw=Math.min(S.w*.7,c.measureText(st.handle).width+80);rr(c,S.x+(S.w-tw)/2,S.y,tw,76,38);c.fillStyle=st.ink;c.fill();txt(c,st.handle,{x:S.x+(S.w-tw)/2+20,y:S.y,w:tw-40,h:76},{max:40,min:24,f:ui,color:st.acc,align:'center',v:'middle'});c.globalAlpha=1;return S.y+100})():S.y;
+  const bot=S.y+S.h-(st.showTicker?ticker(c,t,S,ar):0);const avail=bot-top;
+  const R=Math.min(S.w/2-6,avail*.3),cx=S.x+S.w/2,cy=top+R;const pp=eb(seg(t,.15,.7));
+  c.save();c.translate(cx,cy);c.scale(pp,pp);c.translate(-cx,-cy);
+  c.strokeStyle=st.acc;c.lineWidth=14;c.setLineDash([46,30]);c.lineDashOffset=-t*60;c.beginPath();c.arc(cx,cy,R-8,0,7);c.stroke();c.setLineDash([]);
+  c.fillStyle=st.card;c.beginPath();c.arc(cx,cy,R-30,0,7);c.fill();const pr=R-46;photo(c,{x:cx-pr,y:cy-pr,w:pr*2,h:pr*2},t,0,()=>{c.beginPath();c.arc(cx,cy,pr,0,7)});c.restore();
+  logo(c,t,S,ar,top);
+  if(st.showTag&&st.tag){const bp=eb(seg(t,.8,.5)),br=Math.min(120,R*.36),bx=cl(cx+(ar?-1:1)*R*.74,S.x+br,S.x+S.w-br),by=cl(cy-R*.72,S.y+br,S.y+S.h-br);
+    c.save();c.translate(bx,by);c.scale(bp,bp);c.rotate(-.18+.05*Math.sin(t*2));star(c,0,0,br,br*.78,14,0);c.fillStyle=st.acc;c.fill();c.lineWidth=8;c.strokeStyle=st.ink;c.stroke();
+    txt(c,st.tag,{x:-br*.68,y:-br*.5,w:br*1.36,h:br},{max:52,min:22,color:on(st.acc),align:'center',v:'middle'});c.restore()}
+  const ny=cy+R+12,nh=Math.min(170,avail*.13);
+  label(c,t,st.name,cx,ny+nh/2,S.w-30,nh*.8,st.acc,-.025,.6);
+  card(c,t,st.head,{x:S.x,y:ny+nh+16,w:S.w,h:bot-(ny+nh+16)},-.015,1.1);
+  c.restore()}
+
+function tSplit(c,t,S){
+  const showT=st.showTag&&st.tag;const foot=[st.showHandle?st.handle:'',st.date].filter(Boolean).join('  •  ');
+  const top=S.y+(showT?104:0);const sy=top+Math.round((S.h-(top-S.y))*.3);if(!bgMedia(c))bgSplit(c,t,sy);
+  c.save();c.beginPath();c.rect(S.x,S.y,S.w,S.h);c.clip();const ar=isAr(st.head);
+  if(showT){const tp=eb(seg(t,0,.45));c.font=fnt(46);const tw=Math.min(S.w*.6,c.measureText(st.tag).width+70);const tx=ar?S.x+S.w-tw:S.x;
+    c.save();c.globalAlpha=cl(tp);rr(c,tx,S.y,tw,80,14);c.fillStyle=st.ink;c.fill();txt(c,st.tag,{x:tx+18,y:S.y,w:tw-36,h:80},{max:46,min:26,color:st.acc,align:'center',v:'middle'});c.restore()}
+  txt(c,st.head,{x:S.x,y:top,w:S.w,h:sy-top-70},{max:110,min:42,color:media.bg?'#fff':on(st.main),v:'middle',t,t0:.25});
+  const bot=S.y+S.h-(st.showTicker?ticker(c,t,S,ar):0)-(foot?60:0);const nh=110;
+  const pb={x:S.x,y:sy-50,w:S.w,h:bot-nh-10-(sy-50)};const pp=eo(seg(t,.5,.7));
+  if(pb.h>80){c.save();c.globalAlpha=pp;c.translate(0,(1-pp)*60);
+    const path=()=>{c.beginPath();c.moveTo(pb.x,pb.y+70);c.lineTo(pb.x+pb.w,pb.y);c.lineTo(pb.x+pb.w,pb.y+pb.h-24);c.quadraticCurveTo(pb.x+pb.w,pb.y+pb.h,pb.x+pb.w-24,pb.y+pb.h);c.lineTo(pb.x+24,pb.y+pb.h);c.quadraticCurveTo(pb.x,pb.y+pb.h,pb.x,pb.y+pb.h-24);c.closePath()};
+    photo(c,pb,t,0,path);c.lineWidth=12;c.strokeStyle=st.acc;path();c.stroke();c.restore()}
+  logo(c,t,S,ar,sy-30);
+  label(c,t,st.name,S.x+S.w/2,pb.y+pb.h+nh/2-14,S.w-30,nh*.86,st.acc,-.02,1);
+  if(foot)txt(c,foot,{x:S.x,y:bot,w:S.w,h:58},{max:36,min:24,f:ui,color:on(st.sec),align:'center',v:'middle',t,t0:1.2});
+  c.restore()}
+
+function sticker(c,t,S){if(!media.stk)return;const s=Math.min(st.ss,S.w,S.h),bob=12;const x=S.x+(S.w-s)*st.sx,y=S.y+bob+(S.h-s-bob*2)*st.sy+Math.sin(t*2.4)*bob;const p=eb(seg(t,1,.5));
+  c.save();c.beginPath();c.rect(S.x,S.y,S.w,S.h);c.clip();c.translate(x+s/2,y+s/2);c.scale(p,p);c.rotate(.06*Math.sin(t*1.7));contain(c,media.stk,{x:-s/2,y:-s/2,w:s,h:s});c.restore()}
+function guides(c,S){c.save();c.fillStyle='rgba(255,40,40,.22)';c.beginPath();c.rect(0,0,W,H);c.rect(S.x,S.y,S.w,S.h);c.fill('evenodd');c.setLineDash([24,16]);c.lineWidth=5;c.strokeStyle='#fff';c.strokeRect(S.x,S.y,S.w,S.h);c.setLineDash([]);
+  c.fillStyle='rgba(0,0,0,.6)';rr(c,W/2-210,S.y+S.h+24,420,64,32);c.fill();c.fillStyle='#fff';c.font=ui(32);c.textAlign='center';c.textBaseline='middle';c.direction='rtl';c.fillText('المنطقة الآمنة · '+PLAT[st.plat].n,W/2,S.y+S.h+56);c.restore()}
+const TPL={breaking:tBreaking,spot:tSpot,split:tSplit};
+function render(c,t,g,tpl){const S=safe();c.save();c.clearRect(0,0,W,H);(TPL[tpl||st.tpl]||tBreaking)(c,t,S);sticker(c,t,S);if(g)guides(c,S);c.restore()}
+
+let T=0,playing=true,base=performance.now(),exp=null,thumbT=0;
+const off=document.createElement('canvas');off.width=W;off.height=H;const octx=off.getContext('2d');
+function thumbs(){clearTimeout(thumbT);thumbT=setTimeout(()=>{document.querySelectorAll('#tpls button').forEach(b=>{render(octx,Math.min(st.dur,4),false,b.dataset.t);const tc=b.querySelector('canvas').getContext('2d');tc.clearRect(0,0,216,384);tc.drawImage(off,0,0,216,384)})},250)}
+function frame(now){
+  if(exp){const tt=(now-exp.start)/1000;T=Math.min(tt,st.dur);render(ctx,T,false);$('pg').style.width=(T/st.dur*100)+'%';if(tt>=st.dur+.1&&!exp.stop){exp.stop=true;exp.r.stop()}}
+  else{if(playing)T=((now-base)/1000)%st.dur;render(ctx,T,st.guides);$('scrub').value=T;$('time').textContent=T.toFixed(1)+' ث'}
+  requestAnimationFrame(frame)}
+
+function syncUI(){
+  document.querySelectorAll('[data-k]').forEach(el=>{const v=st[el.dataset.k];if(v!=null)el.value=v});
+  document.querySelectorAll('[data-b]').forEach(el=>el.checked=!!st[el.dataset.b]);
+  $('o_dur').textContent=st.dur;$('scrub').max=st.dur;$('guides').checked=st.guides!==false;$('sym').checked=st.sym;
+  ['t','b','r','l'].forEach(k=>$('z_'+k).value=st.zone[k]);
+  document.querySelectorAll('#tpls button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===st.tpl));
+  document.querySelectorAll('#plats button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.p===st.plat));
+  document.querySelectorAll('#fonts button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===st.font));
+  document.querySelectorAll('#pals button').forEach((b,i)=>b.setAttribute('aria-pressed',PALS[i].main===st.main&&PALS[i].sec===st.sec&&PALS[i].acc===st.acc));
+  $('play').textContent=playing?'إيقاف':'تشغيل'}
+function changed(){store();thumbs();syncUI()}
+
+$('plats').innerHTML=Object.entries(PLAT).map(([k,p])=>`<button type="button" data-p="${k}">${p.n}</button>`).join('');
+$('fonts').innerHTML=Object.entries(FONTS).map(([k,f])=>`<button type="button" data-f="${k}" style="font-family:${f.f.replace(/"/g,"'")},Cairo;font-weight:${f.w}">${f.n}</button>`).join('');
+$('pals').innerHTML=PALS.map(p=>`<button type="button" aria-label="${p.n}" title="${p.n}">${['main','sec','acc','card','ink'].map(k=>`<i style="background:${p[k]}"></i>`).join('')}</button>`).join('');
+$('prompts').innerHTML=[['خلفية قالب كلاسيك','breaking'],['خلفية قالب سبوت لايت','spot'],['خلفية قالب نص ونص','split'],['ستيكر / شارة','sticker']].map(([n,k])=>`<div class="prompt"><b>${n}</b><p id="p_${k}">${PROMPTS[k]}</p><button type="button" data-copy="${k}">انسخ البرومبت</button></div>`).join('')+'<p class="hint">ولّد في Higgsfield بمقاس 9:16، وبعدين ارفع النتيجة من هنا. الستيكر لو طالع بخلفية، شيلها الأول عشان يبقى PNG شفاف.</p>';
+
+$('tpls').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;st.tpl=b.dataset.t;changed()});
+$('plats').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;st.plat=b.dataset.p;st.zone={...PLAT[st.plat]};changed()});
+$('fonts').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;st.font=b.dataset.f;changed()});
+$('pals').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const p=PALS[[...$('pals').children].indexOf(b)];Object.assign(st,{main:p.main,sec:p.sec,acc:p.acc,card:p.card,ink:p.ink});changed()});
+$('prompts').addEventListener('click',async e=>{const b=e.target.closest('[data-copy]');if(!b)return;try{await navigator.clipboard.writeText(PROMPTS[b.dataset.copy]);b.textContent='اتنسخ ✓'}catch(err){const r=document.createRange();r.selectNodeContents($('p_'+b.dataset.copy));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='اتحدد، انسخه بـ Ctrl+C'}setTimeout(()=>b.textContent='انسخ البرومبت',1800)});
+document.querySelectorAll('[data-k]').forEach(el=>el.addEventListener('input',()=>{st[el.dataset.k]=el.hasAttribute('data-n')?parseFloat(el.value):el.value;if(el.dataset.k==='dur'){T=Math.min(T,st.dur)}changed()}));
+['t','b','r','l'].forEach(k=>$('z_'+k).addEventListener('input',e=>{const v=parseInt(e.target.value,10);if(!isNaN(v)){st.zone[k]=cl(v,0,k==='b'?900:k==='t'?700:400);store();thumbs()}}));
+document.querySelectorAll('[data-b]').forEach(el=>el.addEventListener('change',()=>{st[el.dataset.b]=el.checked;changed()}));
+$('sym').addEventListener('change',e=>{st.sym=e.target.checked;changed()});
+$('zr').addEventListener('click',()=>{st.zone={...PLAT[st.plat]};changed()});
+$('guides').addEventListener('change',e=>{st.guides=e.target.checked;store()});
+$('play').addEventListener('click',()=>{playing=!playing;if(playing)base=performance.now()-T*1000;syncUI()});
+$('scrub').addEventListener('input',e=>{playing=false;T=parseFloat(e.target.value);syncUI()});
+
+function loadImg(file,cb){const u=URL.createObjectURL(file),i=new Image();i.onload=()=>{cb(i);thumbs()};i.src=u}
+$('f_photo').addEventListener('change',e=>{const f=e.target.files[0];if(f)loadImg(f,i=>media.img=i)});
+$('f_stk').addEventListener('change',e=>{const f=e.target.files[0];if(f)loadImg(f,i=>media.stk=i)});
+$('f_logo').addEventListener('change',e=>{const f=e.target.files[0];if(f)loadImg(f,i=>media.logo=i)});
+$('f_bg').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;if(f.type.startsWith('video')){const v=document.createElement('video');v.muted=true;v.loop=true;v.playsInline=true;v.src=URL.createObjectURL(f);v.addEventListener('loadeddata',()=>{media.bg=v;media.bgv=true;thumbs()},{once:true});v.play().catch(()=>{})}else loadImg(f,i=>{media.bg=i;media.bgv=false})});
+[['x_photo','img','f_photo'],['x_stk','stk','f_stk'],['x_logo','logo','f_logo'],['x_bg','bg','f_bg']].forEach(([b,k,f])=>$(b).addEventListener('click',()=>{if(k==='bg'&&media.bgv&&media.bg)media.bg.pause();media[k]=null;$(f).value='';thumbs()}));
+
+let dl=null;window.claude?.use?.('downloads').then(d=>dl=d).catch(()=>{});
+const msg=s=>$('msg').textContent=s;
+async function offer(blob,name){
+  if(dl){try{await dl.save({filename:name,data:blob});msg('الملف اتحفظ ✓');return}catch(e){if(e&&e.code==='declined'){msg('اتلغى الحفظ');return}}}
+  if(!window.claude){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();msg('الملف بيتحمّل ✓');return}
+  msg('مقدرتش أحفظ الملف هنا. افتح الفيديو تحت واحفظه من قايمة الزرار اليمين.')}
+function pickMime(){const m=['video/mp4;codecs=avc1.640028','video/mp4','video/webm;codecs=vp9','video/webm'];return m.find(x=>window.MediaRecorder&&MediaRecorder.isTypeSupported(x))||''}
+$('exp').addEventListener('click',async()=>{
+  if(exp)return;const mime=pickMime();if(!mime||!cv.captureStream){msg('المتصفح ده مبيدعمش تسجيل الفيديو، جرّب Chrome أو Safari جديد.');return}
+  $('exp').disabled=true;$('png').disabled=true;$('out').style.display='none';msg('بيتسجل الفيديو... سيب الصفحة مفتوحة قدامك لحد ما يخلص');
+  if(media.bgv&&media.bg){media.bg.currentTime=0;try{await media.bg.play()}catch(e){}}
+  const s=cv.captureStream(30),r=new MediaRecorder(s,{mimeType:mime,videoBitsPerSecond:12e6}),ch=[];
+  r.ondataavailable=e=>{if(e.data.size)ch.push(e.data)};
+  r.onstop=()=>{const ext=mime.includes('mp4')?'mp4':'webm';const blob=new Blob(ch,{type:mime.split(';')[0]});exp=null;playing=true;base=performance.now();$('exp').disabled=false;$('png').disabled=false;$('pg').style.width='0';
+    $('ov').src=URL.createObjectURL(blob);$('otx').textContent=`فيديو ${ext.toUpperCase()} · ${(blob.size/1048576).toFixed(1)} ميجا · 1080×1920`;$('out').style.display='block';offer(blob,`news-${st.tpl}-${Date.now()}.${ext}`)};
+  r.start(250);exp={r,start:performance.now(),stop:false}});
+$('png').addEventListener('click',()=>{render(octx,Math.min(st.dur-.1,4.5),false);off.toBlob(b=>{if(b)offer(b,`news-${st.tpl}.png`)},'image/png')});
+
+syncUI();thumbs();requestAnimationFrame(frame);
+if(document.fonts)Promise.all(['Lalezar','Cairo','Changa'].map(f=>document.fonts.load(`${FONTS[f].w} 60px ${FONTS[f].f}`))).then(thumbs).catch(()=>{});
+}
+</script>
+</body>
+</html>
